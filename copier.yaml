@@ -1,0 +1,4 @@
+project_name: 
+  type: str
+  help: The name of your project
+  default: my_project

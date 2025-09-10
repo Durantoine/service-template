@@ -1,37 +1,67 @@
-# Use a Python image with uv pre-installed
-FROM ghcr.io/astral-sh/uv:python3.12-bookworm-slim
+FROM python:3.12-slim-trixie as base
 
-# Install the project into `/app`
+COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
+
 WORKDIR /app
 
-# Enable bytecode compilation
+# UV environment settings
 ENV UV_COMPILE_BYTECODE=1
-
-# Copy from the cache instead of linking since it's a mounted volume
 ENV UV_LINK_MODE=copy
-
-# Ensure installed tools can be executed out of the box
 ENV UV_TOOL_BIN_DIR=/usr/local/bin
+ENV PATH="/app/.venv/bin:$PATH"
 
-# Install the project's dependencies using the lockfile and settings
+# Copy only project metadata for dependency install
+COPY pyproject.toml uv.lock* /app/
+
+# Generate uv.lock if it doesn't exist
 RUN --mount=type=cache,target=/root/.cache/uv \
-    --mount=type=bind,source=uv.lock,target=uv.lock \
-    --mount=type=bind,source=pyproject.toml,target=pyproject.toml \
+    if [ ! -f uv.lock ]; then \
+        echo "uv.lock not found — generating..."; \
+        uv lock; \
+    fi && \
+    uv sync --locked --no-install-project
+# # Install locked dependencies (cached if pyproject.toml/uv.lock unchanged)
+# RUN --mount=type=cache,target=/root/.cache/uv \
+#     uv sync --locked --no-install-project
+
+
+FROM base AS dev
+
+# Install dev dependencies
+RUN --mount=type=cache,target=/root/.cache/uv \
+    uv sync --locked --no-install-project
+
+# Copy full project source
+COPY . /app
+
+# Install project itself + dev dependencies
+RUN --mount=type=cache,target=/root/.cache/uv \
+    uv sync --locked
+
+# Reset ENTRYPOINT
+ENTRYPOINT []
+
+# Dev CMD with fastapi CLI and hot reload
+CMD ["fastapi", "dev", "--host", "0.0.0.0", "service"]
+
+
+FROM base AS prod
+
+# Install only production dependencies
+RUN --mount=type=cache,target=/root/.cache/uv \
     uv sync --locked --no-install-project --no-dev
 
-# Then, add the rest of the project source code and install it
-# Installing separately from its dependencies allows optimal layer caching
+# Copy full project source
 COPY . /app
+
+# Install project itself (prod only, no dev dependencies)
 RUN --mount=type=cache,target=/root/.cache/uv \
     uv sync --locked --no-dev
 
-# Place executables in the environment at the front of the path
-ENV PATH="/app/.venv/bin:$PATH"
-
-# Reset the entrypoint, don't invoke `uv`
+# Reset ENTRYPOINT
 ENTRYPOINT []
 
-# Run the FastAPI application by default
-# Uses `fastapi dev` to enable hot-reloading when the `watch` sync occurs
-# Uses `--host 0.0.0.0` to allow access from outside the container
-CMD ["fastapi", "dev", "--host", "0.0.0.0", "src/uv_docker_example"]
+# Prod CMD with uvicorn multi-worker
+CMD ["/app/.venv/bin/uvicorn", "service:app", "--host", "0.0.0.0", "--workers", "4"]
+
+

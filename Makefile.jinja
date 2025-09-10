@@ -1,0 +1,9 @@
+# Name of your container
+SERVICE_NAME = {{project_name}}
+COMPOSE_FILE = compose.yaml
+
+.PHONY: lint test start
+
+# Lint with Ruff
+lint:
+	docker compose -f $(COMPOSE_FILE) run --rm $(SERVICE_NAME) uvx ruff check --fix

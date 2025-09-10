@@ -1,7 +1,10 @@
 services:
-  web:
+  {{project_name}}:
     # Build the image from the Dockerfile in the current directory
-    build: .
+    build:
+      context: .
+      target: dev
+    image: {{project_name}}:dev
 
     # Host the FastAPI application on port 8000
     ports:
@@ -9,7 +12,6 @@ services:
 
     develop:
       # Create a `watch` configuration to update the app
-      # https://docs.docker.com/compose/file-watch/#compose-watch-versus-bind-mounts
       watch:
         # Sync the working directory with the `/app` directory in the container
         - action: sync

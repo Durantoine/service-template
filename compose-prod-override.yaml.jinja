@@ -1,0 +1,11 @@
+services:
+  {{project_name}}:
+    # Build the image from the Dockerfile in the current directory
+    build:
+      context: .
+      target: prod
+    image: {{project_name}}:prod
+
+    # Host the FastAPI application on port 8000
+    ports:
+      - "8000:8000"
