@@ -1,0 +1,24 @@
+# {{project_name}}
+
+This project is containerized using Docker and UV for dependency management, with separate setups for development and production.
+
+## Requirements
+
+- Docker
+- Docker Compose
+- UV (installed inside the container)
+- Python 3.11+ (optional for local dev tools)
+
+## Development Setup
+
+The development environment includes hot-reloading, dev dependencies, and linting. To build and run the dev container:
+
+```bash
+docker compose up --build
+
+## Production Setup
+
+The production container runs only production dependencies and is optimized for performance. To build and run the production container:
+
+```bash
+docker compose -f compose.yaml -f compose-prod-override.yaml up --build
