@@ -1,9 +1,32 @@
-# Name of your container
-SERVICE_NAME = {{project_name}}
+SERVICE_NAME = {{service_name}}
 COMPOSE_FILE = compose.yaml
+PROD_COMPOSE_FILE = compose-prod-override.yaml
 
-.PHONY: lint test start
-
-# Lint with Ruff
 lint:
-	docker compose -f $(COMPOSE_FILE) run --rm $(SERVICE_NAME) uvx ruff check --fix
+	docker compose -f $(COMPOSE_FILE) run --rm $(SERVICE_NAME) uvx ruff check --fix /app/service /app/tests
+
+format:
+	docker compose -f $(COMPOSE_FILE) run --rm $(SERVICE_NAME) uvx black /app/service /app/tests
+
+check-types:
+	docker compose -f $(COMPOSE_FILE) run --rm $(SERVICE_NAME) uvx pyright /app/service /app/tests
+
+test:
+	docker compose -f $(COMPOSE_FILE) run --rm $(SERVICE_NAME) uvx pytest /app/tests
+
+build-dev:
+	docker compose -f $(COMPOSE_FILE) build $(SERVICE_NAME)
+
+build-prod:
+	docker compose -f $(COMPOSE_FILE) -f $(PROD_COMPOSE_FILE) build $(SERVICE_NAME)
+
+dev-up:
+	docker compose -f $(COMPOSE_FILE) -f $(PROD_COMPOSE_FILE) up -d --build
+
+prod-up:
+	docker compose -f $(COMPOSE_FILE) -f $(PROD_COMPOSE_FILE) up -d --build
+
+stop:
+	docker compose -f $(COMPOSE_FILE) -f $(PROD_COMPOSE_FILE) down
+
+lint-all: lint format check-types

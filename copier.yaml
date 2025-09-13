@@ -1,4 +1,9 @@
-project_name: 
+service_name:
   type: str
   help: The name of your project
-  default: my_project
+  default: my_service
+
+service_port:
+  type: str
+  help: The port for the service
+  default: 8000

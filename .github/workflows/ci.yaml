@@ -7,8 +7,7 @@ on:
   workflow_dispatch:
 
 concurrency:
-  group:
-    ${{ github.workflow }}-${{ github.ref_name }}-${{
+  group: ${{ github.workflow }}-${{ github.ref_name }}-${{
     github.event.pull_request.number || github.sha }}
   cancel-in-progress: true
 
@@ -90,7 +89,7 @@ jobs:
         with:
           name: uv-docker-example-standalone
           path: /tmp
-  
+
       - name: Load images
         run: |
           docker load --input /tmp/uv-docker-example.tar

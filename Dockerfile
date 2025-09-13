@@ -1,4 +1,4 @@
-FROM python:3.12-slim-trixie as base
+FROM python:3.12-slim-trixie AS base
 
 COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
 
@@ -36,13 +36,13 @@ COPY . /app
 
 # Install project itself + dev dependencies
 RUN --mount=type=cache,target=/root/.cache/uv \
-    uv sync --locked
+    uv sync --locked --no-install-project
 
 # Reset ENTRYPOINT
 ENTRYPOINT []
 
 # Dev CMD with fastapi CLI and hot reload
-CMD ["fastapi", "dev", "--host", "0.0.0.0", "service"]
+CMD ["fastapi", "dev", "--host", "0.0.0.0", "--port", "{{service_port}}", "service"]
 
 
 FROM base AS prod
@@ -62,6 +62,6 @@ RUN --mount=type=cache,target=/root/.cache/uv \
 ENTRYPOINT []
 
 # Prod CMD with uvicorn multi-worker
-CMD ["/app/.venv/bin/uvicorn", "service:app", "--host", "0.0.0.0", "--workers", "4"]
+CMD ["/app/.venv/bin/uvicorn", "service:app", "--host", "0.0.0.0", "--port", "{{service_port}}", "--workers", "4"]
 
 

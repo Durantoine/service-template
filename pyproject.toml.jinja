@@ -1,5 +1,5 @@
 [project]
-name = "{{ project_name}}"
+name = "{{ service_name}}"
 version = "0.1.0"
 description = "Add your description here"
 readme = "README.md"
@@ -19,7 +19,22 @@ hello = "service:hello"
 dev-dependencies = [
     "ruff>=0.6.2",
     "fastapi-cli>=0.0.5",
+    "black>=24.0.0",
+    "pytest>=8.2.0",
+    "pyright>=1.1.300"
 ]
 
 [tool.hatch.build.targets.wheel]
 packages = ["service"]
+
+[tool.black]
+line-length = 100
+target-version = ["py311"]
+skip-string-normalization = true
+
+[tool.mypy]
+python_version = 3.12
+ignore_missing_imports = true
+strict = true
+show_error_codes = true
+follow_imports = "silent"

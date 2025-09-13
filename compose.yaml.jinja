@@ -1,14 +1,14 @@
 services:
-  {{project_name}}:
+  {{service_name}}:
     # Build the image from the Dockerfile in the current directory
     build:
       context: .
       target: dev
-    image: {{project_name}}:dev
+    image: {{service_name}}:dev
 
     # Host the FastAPI application on port 8000
     ports:
-      - "8000:8000"
+      - "8000:{{service_port}}"
 
     develop:
       # Create a `watch` configuration to update the app
