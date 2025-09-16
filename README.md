@@ -22,6 +22,10 @@ Then, create a new service from this template:
 
 Copier will ask you a few questions (service name, port, description, …) and scaffold a ready-to-use project.
 
+> ⚠️ **Attention :**
+>
+> - Make sure **Docker** is installed and running on your machine before starting the service.
+
 ---
 
 ### 2. Development setup
@@ -109,7 +113,7 @@ my-new-service/
 ├── compose.yaml                 # Base docker-compose file
 ├── compose-dev-override.yaml    # Dev-specific overrides
 ├── compose-prod-override.yaml   # Prod-specific overrides
-├── src/                         # Your service source code
+├── service/                         # Your service source code
 ├── tests/                       # Your test suite
 └── Makefile                     # Useful commands (dev/prod)
 ```
@@ -118,10 +122,10 @@ my-new-service/
 
 ## ✅ Next steps
 
-1. Write your service logic inside `src/`.  
+1. Write your service logic inside `service/`.  
 2. Add tests in `tests/`.  
 3. Run your service locally with `make dev-up`.  
-4. Access the FastAPI app on `http://localhost:<service_port>`.  
+4. Access the FastAPI app on `http://localhost:8000.  
 5. Push it to your own Git repository.  
 6. Deploy wherever you want 🚀
 
