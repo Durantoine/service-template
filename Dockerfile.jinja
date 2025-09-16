@@ -20,9 +20,6 @@ RUN --mount=type=cache,target=/root/.cache/uv \
         uv lock; \
     fi && \
     uv sync --locked --no-install-project
-# # Install locked dependencies (cached if pyproject.toml/uv.lock unchanged)
-# RUN --mount=type=cache,target=/root/.cache/uv \
-#     uv sync --locked --no-install-project
 
 
 FROM base AS dev
