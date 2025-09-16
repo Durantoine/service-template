@@ -31,6 +31,14 @@ Copier will ask you a few questions (service name, port, description, …) and s
 
 ### 2. Development setup
 
+> ⚡ One of the coolest features of this template is **hot-reload during development**.
+> 
+> - You can **modify the source code directly on your host machine**.  
+> - The changes are **instantly reflected inside the container**, and the FastAPI app **restarts automatically**.  
+> - There’s **no need to rebuild the Docker image or restart the container manually**.  
+> 
+> This means you can **iterate extremely fast**, test new features, and see results immediately—perfect for rapid development and experimentation.
+
 Move into your new service folder:
 
     cd my-new-service
