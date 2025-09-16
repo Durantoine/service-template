@@ -94,14 +94,18 @@ Stop the production environment:
 
 ### 4. Useful commands
 
-| Command            | Description                            |
-|--------------------|----------------------------------------|
-| `make dev-up`      | Start development containers           |
-| `make dev-down`    | Stop development containers            |
-| `make dev-logs`    | Show logs from development containers  |
-| `make prod-up`     | Start production containers            |
-| `make prod-down`   | Stop production containers             |
-| `make prod-logs`   | Show logs from production containers   |
+| Command            | Description                                                                                  |
+|--------------------|----------------------------------------------------------------------------------------------|
+| `make lint`        | Run ruff to lint the service and fix issues: `docker compose -f compose.yaml run --rm {{service_name}} uvx ruff check --fix /app/service /app/tests` |
+| `make lint-all`    | Run lint, format, and type checks in sequence                                                |
+| `make format`      | Format code with black: `docker compose -f compose.yaml run --rm {{service_name}} uvx black /app/service /app/tests` |
+| `make check-types` | Type checking with pyright: `docker compose -f compose.yaml run --rm {{service_name}} uvx pyright /app/service /app/tests` |
+| `make test`        | Run tests with pytest: `docker compose -f compose.yaml run --rm {{service_name}} uvx pytest /app/tests` |
+| `make build-dev`   | Build development image: `docker compose -f compose.yaml build {{service_name}}`             |
+| `make build-prod`  | Build production image: `docker compose -f compose.yaml -f compose-prod-override.yaml build {{service_name}}` |
+| `make dev-up`      | Start development environment: `docker compose -f compose.yaml up --build`                  |
+| `make prod-up`     | Start production environment: `docker compose -f compose.yaml -f compose-prod-override.yaml up -d --build` |
+| `make stop`        | Stop all containers: `docker compose -f compose.yaml -f compose-prod-override.yaml down`    |
 
 ---
 
