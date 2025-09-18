@@ -13,15 +13,13 @@ dependencies = [
 requires = ["hatchling"]
 build-backend = "hatchling.build"
 
-[project.scripts]
-hello = "service:hello"
-
 [tool.uv]
 dev-dependencies = [
     "ruff>=0.6.2",
     "fastapi-cli>=0.0.5",
     "pytest>=8.2.0",
     "pyright>=1.1.300",
+    "uvicorn >=0.23.2",
 ]
 
 [tool.hatch.build.targets.wheel]
