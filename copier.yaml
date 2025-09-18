@@ -5,5 +5,5 @@ service_name:
 
 service_port:
   type: str
-  help: The port for the service
+  help: The port to use in order for your host to access the service
   default: 8000
