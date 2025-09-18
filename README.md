@@ -59,7 +59,7 @@ The FastAPI application is exposed on the port you defined when generating the s
 
 Open your browser or use curl:
 
-    http://localhost:8000
+    http://localhost:8000/docs
 
 You should see your FastAPI app running.
 

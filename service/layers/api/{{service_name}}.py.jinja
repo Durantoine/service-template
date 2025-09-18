@@ -1,0 +1,11 @@
+from fastapi import APIRouter
+from fastapi.responses import PlainTextResponse
+
+from service.layers.domain.{{service_name}} import SERVICE_PREFIX
+
+router = APIRouter(prefix="/" + SERVICE_PREFIX)
+
+
+@router.get("/", response_class=PlainTextResponse)
+async def root() -> str:
+    return "Hello world!"
