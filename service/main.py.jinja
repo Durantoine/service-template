@@ -2,7 +2,6 @@ import logging
 
 import structlog
 from fastapi import FastAPI
-from fastapi.responses import PlainTextResponse
 from structlog.dev import ConsoleRenderer
 from service.layers.api import {{service_name}}
 
@@ -28,6 +27,6 @@ structlog.configure(
     cache_logger_on_first_use=True,
 )
 
-log = structlog.get_logger()
+struct_logger = structlog.get_logger()
 
 app.include_router({{service_name}}.router)
